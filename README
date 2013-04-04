@@ -1,0 +1,19 @@
+SV2gbk is a Perl-Script using BioPerl Modules to incorporate Structural Variants (SVs) from a list into a genbank-file (.gbk)
+
+
+The file format for SVs must have the following line format (in Perl regex):
+
+/^(DEL|INS|INV)\t\d+\t\d+(?:\t\w+)?$/
+
+I.e. columns must be of the form:
+(i)   type of SV: DEL = deletion, INS = insertion, INV = inversion
+(ii)  inclusive start position (for DEL this position itself is deleted; for INS, the first new nucleotide will go to this position; for INV this position will get swapped with the end position)
+(iii) inclusive end position (for DEL this position itself is deleted; for INS, this becomes the second nucleotide of the insertion or the first base after it for single nucleotide insertions; for INV this position will get swapped with the start position)
+
+ATTENTION to the following 3 DISCLAIMERS:
+
+1) This script removes features and single sublocations that have been fully deleted from the sequence. Indels are applied to start and end values of features where necessary, but changes that affect the integrity of a feature are NOT annotated. Please use external software (e.g. snpEff) to annotate your SVs and apply any regarding information manually to the genbank-file.
+2) Inversion breakpoints are assumed to NOT lie within any feature, so they are ONLY applied to features that fully lie within the inversion. This also means, that an inversion is either applied to all sublocations of a feature or non. So inversion breakpoints should also be annotated externally!
+3) The sequence you supply to be attached has to be adjusted for the SVs beforehand. The script does NOT alter this sequence, but only substitutes the original one with it!
+
+These 3 points are basically the current To-Do-list, which also includes support for the incorporation of Single Nucleotide Polymorphisms (SNPs) at some point.
